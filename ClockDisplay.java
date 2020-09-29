@@ -16,6 +16,7 @@ public class ClockDisplay
 {
     private NumberDisplay hours;
     private NumberDisplay minutes;
+    private String timeOfDay;
     private String displayString;    // simulates the actual display
     
     /**
@@ -24,8 +25,9 @@ public class ClockDisplay
      */
     public ClockDisplay()
     {
-        hours = new NumberDisplay(24);
+        hours = new NumberDisplay(13);
         minutes = new NumberDisplay(60);
+        timeOfDay = "am";
         updateDisplay();
     }
 
@@ -34,10 +36,11 @@ public class ClockDisplay
      * creates a new clock set at the time specified by the 
      * parameters.
      */
-    public ClockDisplay(int hour, int minute)
+    public ClockDisplay(int hour, int minute, String timeOfDay)
     {
-        hours = new NumberDisplay(24);
+        hours = new NumberDisplay(13);
         minutes = new NumberDisplay(60);
+        this.timeOfDay = timeOfDay;
         setTime(hour, minute);
     }
 
@@ -50,6 +53,10 @@ public class ClockDisplay
         minutes.increment();
         if(minutes.getValue() == 0) {  // it just rolled over!
             hours.increment();
+            if(hours.getValue() == 12)
+            {
+                updateTimeOfDay();
+            }
         }
         updateDisplay();
     }
@@ -72,13 +79,21 @@ public class ClockDisplay
     {
         return displayString;
     }
-    
+    public void updateTimeOfDay()
+    {
+        if(timeOfDay.equalsIgnoreCase("am"))
+        {
+            timeOfDay = "pm";
+        }
+        else
+            timeOfDay = "am";
+    }
     /**
      * Update the internal string that represents the display.
      */
     private void updateDisplay()
     {
         displayString = hours.getDisplayValue() + ":" + 
-                        minutes.getDisplayValue();
+                        minutes.getDisplayValue() + " " + timeOfDay;
     }
 }
